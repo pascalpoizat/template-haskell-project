@@ -11,29 +11,61 @@
 [![Version](https://img.shields.io/hackage/v/template-haskell-project.svg?label=version&amp;style=flat-square)](https://hackage.haskell.org/package/template-haskell-project)
 -->
 
-This is a simple template for Haskell projects. The first step to create your project is:
+This is a simple template for Haskell projects. 
+
+## Installation
+
+Due to `stack` installing and using working files in projects, you cannot just clone the template.
+The first step to create your project is:
 
 ```
 stack new projectname
 ```
 
-Then you can clone this project in it:
+Then go into the new directory that has been created and initialize `git` versioning.
 
 ```
-git clone https://github.com/pascalpoizat/template-haskell-project.git projectname
+cd projectname
+git init
 ```
 
-You can run your project with:
+Now you can setup the remote for getting the template and get it.
 
 ```
-stack exec template-haskell-project-exe
+git remote add origin https://github.com/pascalpoizat/template-haskell-project.git
+git fetch
+git checkout -ft origin/master
+```
+
+You no longer need the remote (of course you may then have your own one to work with).
+
+```
+git remote rm origin
+```
+
+Before playing around with the project you will have to change names in some places.
+First rename `template-haskell-project.cabal` into `projectname.cabal`.
+
+```
+mv template-haskell-project.cabal projectname.cabal
+```
+
+Then replace in `projectname.cabal` all references to `template-haskell-project` by `projectname` (there should be five: the name in the first line, the names of the executable and the test suite, a dependency in each of these two). Of course you will also certainly change the author name, emails, github url, etc.
+
+You can now run build and your project with:
+
+```
+stack build
+stack exec projectname-exe
 ```
 
 You can run your tests (and build the documentation + coverage information) with:
 
 ```
-stack clean; stack test :template-haskell-project-test  --coverage --haddock --no-haddock-deps
+stack clean; stack test :projectname-test  --coverage --haddock --no-haddock-deps
 ```
+
+It is working. Have fun with Haskell!
 
 ## Haskell notes
 
