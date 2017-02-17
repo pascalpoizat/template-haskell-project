@@ -1,0 +1,1 @@
+stack clean; stack test :template-haskell-project-test  --coverage --haddock --no-haddock-deps
