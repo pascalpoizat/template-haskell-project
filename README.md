@@ -13,6 +13,8 @@
 
 This is a simple template for Haskell projects. 
 
+**Note on Coveralls integration:** there seems to be a recent issue with the `stack-hpc-coveralls` module. It has been deactivated for now in order not to break the build.
+
 ## Installation
 
 Due to `stack` installing and using working files in projects, you cannot just clone the template.
