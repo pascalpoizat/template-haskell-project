@@ -54,7 +54,7 @@ Then replace all instances of the string `template-haskell-project` by `projectn
 
 - in the Cabal configuration file, `projectname.cabal` (there should be 5 instances)
 - in the Travis CI configuration file, `.travis.yml`  (there should be 3 instances)
-- if you keep it for the badges, in the Readme file, `README.md` (there should be 4 instances), and also connect to the Travis CI, Coveralls, and Waffle sites to connect the repository of your project to them.
+- if you keep it for the badges, in the Readme file, `README.md` (there should be 4 instances), and also go to the Travis CI, Coveralls, and Waffle sites to link the repository of your project to them.
 
 You can now run build and your project with:
 
