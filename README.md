@@ -50,7 +50,11 @@ First rename `template-haskell-project.cabal` into `projectname.cabal`.
 mv template-haskell-project.cabal projectname.cabal
 ```
 
-Then replace in `projectname.cabal` all references to `template-haskell-project` by `projectname` (there should be five: the name in the first line, the names of the executable and the test suite, a dependency in each of these two). Of course you will also certainly change the author name, emails, github url, etc.
+Then replace all instances of the string `template-haskell-project` by `projectname`:
+
+- in the Cabal configuration file, `projectname.cabal` (there should be 5 instances)
+- in the Travis CI configuration file, `.travis.yml`  (there should be 3 instances)
+- if you keep it for the badges, in the Readme file, `README.md` (there should be 4 times), and also connect to the Travis CI, Coveralls, and Waffle sites to connect the repository of your project to them.
 
 You can now run build and your project with:
 
