@@ -89,6 +89,7 @@ These are some interesting references related either to learning Haskell or that
 - [Hackage central package archive](https://hackage.haskell.org)
 - [containers package](https://hackage.haskell.org/package/containers) for various containers such as Set
 - [fgl package](http://hackage.haskell.org/package/fgl) for (inductive) graph structures
+- [HaXml package](https://hackage.haskell.org/package/HaXml) for XML related tasks
 
 ### Testing
 
