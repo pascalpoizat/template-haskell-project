@@ -11,7 +11,7 @@
 [![Version](https://img.shields.io/hackage/v/template-haskell-project.svg?label=version&amp;style=flat-square)](https://hackage.haskell.org/package/template-haskell-project)
 -->
 
-This is a simple template for Haskell projects built with Stack / LTS Haskell 8.2 (ghc-8.0.2).
+This is a simple template for Haskell projects built with Stack / LTS Haskell 7.19 (ghc-8.0.1).
 
 ## Installation
 
