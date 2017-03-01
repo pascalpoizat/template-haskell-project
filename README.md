@@ -11,7 +11,7 @@
 [![Version](https://img.shields.io/hackage/v/template-haskell-project.svg?label=version&amp;style=flat-square)](https://hackage.haskell.org/package/template-haskell-project)
 -->
 
-This is a simple template for Haskell projects built with Stack / LTS Haskell 7.19 (ghc-8.0.1).
+This is a simple template for Haskell projects built with Stack.
 
 ## Installation
 
@@ -159,7 +159,7 @@ These are some interesting references related either to learning Haskell or that
 - [Stack and Travis CI](https://docs.haskellstack.org/en/latest/travis_ci/) for continuous integration
 - [HPC](https://wiki.haskell.org/Haskell_program_coverage) for code coverage
 - [Coveralls](https://coveralls.io) for code coverage
-- [stack-hpc-coveralls](https://github.com/rubik/stack-hpc-coveralls) for code coverage
+- [stack-hpc-coveralls](https://github.com/rubik/stack-hpc-coveralls) for code coverage (does not seem to work with Stack lts-8.3)
 
 ### IDE
 
