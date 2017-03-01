@@ -15,7 +15,58 @@ This is a simple template for Haskell projects built with Stack / LTS Haskell 7.
 
 ## Installation
 
-Due to `stack` installing and using working files in projects, you cannot just clone the template.
+There are two ways to use the template.
+
+### 1. Cloning the template and then setting up the stack project
+
+First clone the template:
+
+```
+git clone https://github.com/pascalpoizat/template-haskell-project.git
+```
+
+Rename the project, go into it, and rename the `.cabal` file.
+
+```
+mv template-haskell-project projectname
+cd projectname
+mv template-haskell-project.cabal projectname.cabal
+```
+
+Edit the `projectname.cabal` file to replace references to `template-haskell-project` by `projectname`
+(there should be 7 instances). 
+Do the same for the `.travis.yml` file (there should be 3 instances),
+the `README.md` file (there should be 9 instances), and
+the `run` file (there should be 1 instance). If you have the `sed` command on your system you can do it easily using:
+
+```
+sed -i.old 's/template-haskell-project/projectname/g' projectname.cabal
+sed -i.old 's/template-haskell-project/projectname/g' .travis.yml
+sed -i.old 's/template-haskell-project/projectname/g' README.md
+sed -i.old 's/template-haskell-project/projectname/g' run
+```
+
+with `.old` backup files being created in case something goes wrong.
+
+To test if all is ok you can use one or several of these commands:
+
+```
+stack build
+stack test
+stack exec projectname-exe
+./run
+```
+
+To end, you will certainly remove the reference to the template remote repository using:
+
+```
+git remote rm origin
+```
+
+and then use you own repository.
+
+### 2. Create a new local stack project and then getting code from the template
+
 The first step to create your project is:
 
 ```
@@ -50,26 +101,29 @@ First rename `template-haskell-project.cabal` into `projectname.cabal`.
 mv template-haskell-project.cabal projectname.cabal
 ```
 
-Then replace all instances of the string `template-haskell-project` by `projectname`:
+Edit the `projectname.cabal` file to replace references to `template-haskell-project` by `projectname`
+(there should be 7 instances). 
+Do the same for the `.travis.yml` file (there should be 3 instances),
+the `README.md` file (there should be 9 instances), and
+the `run` file (there should be 1 instance). If you have the `sed` command on your system you can do it easily using:
 
-- in the Cabal configuration file, `projectname.cabal` (there should be 7 instances)
-- in the Travis CI configuration file, `.travis.yml`  (there should be 3 instances)
-- if you keep it for the badges, in the Readme file, `README.md` (there should be 9 instances), and also go to the Travis CI, Coveralls, and Waffle sites to link the repository of your project to them.
+```
+sed -i.old 's/template-haskell-project/projectname/g' projectname.cabal
+sed -i.old 's/template-haskell-project/projectname/g' .travis.yml
+sed -i.old 's/template-haskell-project/projectname/g' README.md
+sed -i.old 's/template-haskell-project/projectname/g' run
+```
 
-You can now build and run your project with:
+with `.old` backup files being created in case something goes wrong.
+
+To test if all is ok you can use one or several of these commands:
 
 ```
 stack build
+stack test
 stack exec projectname-exe
+./run
 ```
-
-You can run your tests (and build the documentation + coverage information) with:
-
-```
-stack clean; stack test :projectname-test  --coverage --haddock --no-haddock-deps
-```
-
-It is working. Have fun with Haskell!
 
 ## Haskell notes
 
