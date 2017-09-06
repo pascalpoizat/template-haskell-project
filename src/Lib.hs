@@ -28,7 +28,7 @@ data Point = Point {x:: Int, y:: Int}
 
 -- |Show instance for Point.
 instance Show Point where
-  show (Point x y) = "(" ++ (show x) ++ ", " ++ (show y) ++ ")"
+  show (Point x y) = "(" ++ show x ++ ", " ++ show y ++ ")"
 
 -- |Check if the point is at origin, i.e., (0,0)
 isOrigin :: Point -> Bool
