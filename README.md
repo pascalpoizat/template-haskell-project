@@ -164,6 +164,7 @@ These are some interesting references related either to learning Haskell or that
 ### IDE
 
 - [Haskell layer](https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/haskell) for [Spacemacs](http://spacemacs.org)
+- [Haskero](https://gitlab.com/vannnns/haskero/blob/master/README.md) for [Visual Studio Code](https://code.visualstudio.com)
 
 ### TODO
 
