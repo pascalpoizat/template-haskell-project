@@ -139,9 +139,11 @@ These are some interesting references related either to learning Haskell or that
 ### Libraries
 
 - [Hackage central package archive](https://hackage.haskell.org)
-- [containers package](https://hackage.haskell.org/package/containers) for various containers such as Set
-- [fgl package](http://hackage.haskell.org/package/fgl) for (inductive) graph structures
-- [HaXml package](https://hackage.haskell.org/package/HaXml) for XML related tasks
+- [containers](https://hackage.haskell.org/package/containers) for various containers such as Set
+- [optparse-applicative](http://hackage.haskell.org/package/optparse-applicative) for parsing command line options
+- [fgl](http://hackage.haskell.org/package/fgl) for (inductive) graph structures
+- [aeson](https://hackage.haskell.org/package/aeson) for JSON related tasks
+- [HaXml](https://hackage.haskell.org/package/HaXml) for XML related tasks
 
 ### Testing
 
