@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/pascalpoizat/template-haskell-project/master.svg?style=flat-square)](https://travis-ci.org/pascalpoizat/template-haskell-project)
 [![Code Coverage](https://img.shields.io/coveralls/pascalpoizat/template-haskell-project/master.svg?style=flat-square)](https://coveralls.io/github/pascalpoizat/template-haskell-project)
 [![License](https://img.shields.io/github/license/pascalpoizat/template-haskell-project.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/github/release/pascalpoizat/template-haskell-project/all.svg?label=version&style=flat-square)](build.gradle)<br/>
+[![Version](https://img.shields.io/github/tag/pascalpoizat/template-haskell-project.svg?label=version&style=flat-square)](build.gradle)<br/>
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/pascalpoizat/template-haskell-project.svg?columns=all)](https://waffle.io/pascalpoizat/template-haskell-project)
 
 <!--
