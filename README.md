@@ -154,6 +154,7 @@ These are some interesting references related either to learning Haskell or that
 
 ### Development
 
+- For VCS and commit messages, see [here](https://github.com/pascalpoizat/template-java-project/blob/master/README.md), "Source repository and VCS"
 - [Stack](https://haskellstack.org/) build system
 - [Cabal](https://www.haskell.org/cabal/) used by Stack
 - [Travis CI](https://travis-ci.org) for continuous integration
