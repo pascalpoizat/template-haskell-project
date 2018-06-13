@@ -2,10 +2,9 @@
 
 [![Build Status](https://img.shields.io/travis/pascalpoizat/template-haskell-project/master.svg?style=flat-square)](https://travis-ci.org/pascalpoizat/template-haskell-project)
 [![Code Coverage](https://img.shields.io/coveralls/pascalpoizat/template-haskell-project/master.svg?style=flat-square)](https://coveralls.io/github/pascalpoizat/template-haskell-project)
-[![License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.0.0-blue.svg?style=flat-square&label=version)](template-haskell-project.cabal)<br/>
-[![Issues Ready](https://img.shields.io/github/issues-raw/pascalpoizat/template-haskell-project/ready.svg?style=flat-square&label=issues%20ready%20for%20development)](https://waffle.io/pascalpoizat/template-haskell-project)
-[![Issues in Progress](https://img.shields.io/github/issues-raw/pascalpoizat/template-haskell-project/in%20progress.svg?style=flat-square&label=issues%20in%20progress)](https://waffle.io/pascalpoizat/template-haskell-project)
+[![License](https://img.shields.io/github/license/pascalpoizat/template-haskell-project.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/github/release/pascalpoizat/template-haskell-project/all.svg?label=version&style=flat-square)](build.gradle)<br/>
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/pascalpoizat/template-haskell-project.svg?columns=all)](https://waffle.io/pascalpoizat/template-haskell-project)
 
 <!--
 [![Version](https://img.shields.io/hackage/v/template-haskell-project.svg?label=version&amp;style=flat-square)](https://hackage.haskell.org/package/template-haskell-project)
