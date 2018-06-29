@@ -169,6 +169,8 @@ These are some interesting references related either to learning Haskell or that
 - [Haskero](https://gitlab.com/vannnns/haskero/blob/master/README.md) for [Visual Studio Code](https://code.visualstudio.com)
 - [Haskell layer](https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/haskell) for [Spacemacs](http://spacemacs.org)
 
+see also more generally this very nice project: [haskell-ide-chart](https://github.com/rainbyte/haskell-ide-chart).
+
 ### TODO
 
 see: [issues](https://github.com/pascalpoizat/template-haskell-project/issues)
