@@ -177,12 +177,12 @@ see: [issues](https://github.com/pascalpoizat/template-haskell-project/issues)
 
 ## Acknowledgements
 
-### For help in installing / running Haskell:
-
-This includes Haskell, Stack, and Spacemacs
+I would like to thank these people (or the people behind these accounts) for help with setting up a working Haskell environment and updating it from time to time.
 
 [@AkiiZedd (twitter)](https://twitter.com/AkiiZedd),
+[@alanz (github)](https://github.com/alanz),
 [@BeRewt (twitter)](https://twitter.com/BeRewt),
 [@kaddourkardio (twitter)](https://twitter.com/kaddourkardio), 
 [@SergeStinckwich (twitter)](https://twitter.com/SergeStinckwich),
-[@spacemacs (twitter)](https://twitter.com/spacemacs)
+[@spacemacs (twitter)](https://twitter.com/spacemacs),
+[@rainbyte (github)](https://github.com/rainbyte)
