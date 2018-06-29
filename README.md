@@ -165,8 +165,9 @@ These are some interesting references related either to learning Haskell or that
 
 ### IDE
 
-- [Haskell layer](https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/haskell) for [Spacemacs](http://spacemacs.org)
+- [Haskell IDE Engine (HIE)](https://github.com/haskell/haskell-ide-engine) together with the [Haskell Language Server](https://marketplace.visualstudio.com/items?itemName=alanz.vscode-hie-server) for [Visual Studio Code](https://code.visualstudio.com) (note: HIE can also be used with other editors, see the doc)
 - [Haskero](https://gitlab.com/vannnns/haskero/blob/master/README.md) for [Visual Studio Code](https://code.visualstudio.com)
+- [Haskell layer](https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Blang/haskell) for [Spacemacs](http://spacemacs.org)
 
 ### TODO
 
