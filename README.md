@@ -1,131 +1,170 @@
 # template-haskell-project
 
-**under work to support multiple builds and binaries deployment**
+A simple template for Haskell projects built with Stack 
+
+Tested with Stack 1.9.3 and resolver lts-12.26 / GHC 8.4.4.
+
+**new: support for multiple builds and binaries deployment**
+
+*soon (maybe): coverage information using coveralls.io*
 
 [![Build Status](https://img.shields.io/travis/pascalpoizat/template-haskell-project/master.svg?style=flat-square)](https://travis-ci.org/pascalpoizat/template-haskell-project)
+[![License](https://img.shields.io/github/license/pascalpoizat/template-haskell-project.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/github/tag/pascalpoizat/template-haskell-project.svg?label=version&style=flat-square)](template-haskell-project.cabal)<br/>
 <!--
 [![Code Coverage](https://img.shields.io/coveralls/pascalpoizat/template-haskell-project/master.svg?style=flat-square)](https://coveralls.io/github/pascalpoizat/template-haskell-project)
-[![License](https://img.shields.io/github/license/pascalpoizat/template-haskell-project.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/github/tag/pascalpoizat/template-haskell-project.svg?label=version&style=flat-square)](build.gradle)<br/>
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/pascalpoizat/template-haskell-project.svg?columns=all)](https://waffle.io/pascalpoizat/template-haskell-project)
 -->
 <!--
 [![Version](https://img.shields.io/hackage/v/template-haskell-project.svg?label=version&amp;style=flat-square)](https://hackage.haskell.org/package/template-haskell-project)
 -->
 
-This is a simple template for Haskell projects built with Stack.
-
-## Installation
-
-There are two ways to use the template.
-
-### 1. Cloning the template and then setting up the stack project
-
-First clone the template:
-
-```
-git clone https://github.com/pascalpoizat/template-haskell-project.git
-```
-
-Rename the project, go into it, and rename the `.cabal` file.
-
-```
-mv template-haskell-project projectname
-cd projectname
-mv template-haskell-project.cabal projectname.cabal
-```
-
-Edit the `projectname.cabal` file to replace references to `template-haskell-project` by `projectname`
-(there should be 7 instances). 
-Do the same for the `.travis.yml` file (there should be 3 instances),
-the `README.md` file (there should be 9 instances), and
-the `run` file (there should be 1 instance). If you have the `sed` command on your system you can do it easily using:
-
-```
-sed -i.old 's/template-haskell-project/projectname/g' projectname.cabal
-sed -i.old 's/template-haskell-project/projectname/g' .travis.yml
-sed -i.old 's/template-haskell-project/projectname/g' README.md
-sed -i.old 's/template-haskell-project/projectname/g' run
-```
-
-with `.old` backup files being created in case something goes wrong.
-
-To test if all is ok you can use one or several of these commands:
-
-```
-stack build
-stack test
-stack exec projectname-exe
-./run
-```
-
-To end, you will certainly remove the reference to the template remote repository using:
-
-```
-git remote rm origin
-```
-
-and then use you own repository.
-
-### 2. Create a new local stack project and then getting code from the template
+## Create the project
 
 The first step to create your project is:
 
 ```
-stack new projectname
+stack new projectname --resolver lts-12
 ```
 
-Then go into the new directory that has been created and initialize `git` versioning.
+To test if all is ok, run:
 
 ```
+stack clean && stack build && stack test && stack exec projectname-exe
+```
+
+The result should be:
+
+```sh
+[... lots of text ...]
+someFunc
+```
+
+Create a new repository on GitHub, named `projectname`.
+Then go into the new directory that has been created by `stack new` and initialize `git` versioning.
+
+```sh
 cd projectname
 git init
+git remote add origin https://github.com/youraccount/projectname.git
+git add * .*
+git commit -m "initial commit"
+git push -u origin master
 ```
 
-Now you can setup the remote for getting the template and get it.
+At this point you may consider replacing the default `LICENSE` by one of your choice (choosing one from GitHub will make it recognize it and the license badge in the readme will be automatic) and edit the `README.md` file (e.g., by reusing this one).
 
-```
-git remote add origin https://github.com/pascalpoizat/template-haskell-project.git
-git fetch
-git checkout -ft origin/master
-```
+We will use branch `master` for final releases (and version tags) and a second branch, `develop` for snapshot releases.
+You may of course have also feature-specific branches but remind that version tags should only be pushed to `master`.
 
-You no longer need the remote (of course you may then have your own one to work with).
-
-```
-git remote rm origin
+```sh
+git checkout -b develop
+git push origin develop
+git checkout master
 ```
 
-Before playing around with the project you will have to change names in some places.
-First rename `template-haskell-project.cabal` into `projectname.cabal`.
+## Adding continuous integration to the picture
 
-```
-mv template-haskell-project.cabal projectname.cabal
+We will use [Travis CI](https://travis-ci.org).
+
+Our objective is:
+
+- have the CI build your application with `stack` for 2 environments
+	- LTS-12.26, GHC 8.4.4, linux, x86_64
+	- LTS-12.26, GHC 8.4.4, osx, x86_64
+- have the CI deploy binaries to GitHub releases
+	- a final release for tagged commits (in our scenario, make tags only on branch `master`)
+	- a draft release for commits on branch `develop`)
+
+First, go at [https://travis-ci.org](https://travis-ci.org), connect your GitHub account to it and make sure that your `projectname` is activated [there](https://travis-ci.org/account/repositories). If it does not appear, sync your account (upper left).
+
+Create a file named `.travis.yml` at the root of your project with [these contents](https://github.com/pascalpoizat/template-haskell-project/blob/master/.travis.yml), and replacing any occurence of `template-haskell-project` by `projectname`.
+
+Save the `deploy` part of it somewhere (a file or your clipboard). You will need it when it is erased in the next step.
+
+To get a secure token for Travis CI (with a read access on all your public repos) install the Travis CI client (see [here](https://github.com/travis-ci/travis.rb#installation)) and run:
+
+```sh
+travis setup releases --force
+Username: (enter your user name at GitHub)
+Password for username: (enter your password at GitHub)
+File to Upload: (type enter)
+Deploy only from username/projectname? |yes| (type enter)
+Encrypt API key? |yes| (type enter)
 ```
 
-Edit the `projectname.cabal` file to replace references to `template-haskell-project` by `projectname`
-(there should be 7 instances). 
-Do the same for the `.travis.yml` file (there should be 3 instances),
-the `README.md` file (there should be 9 instances), and
-the `run` file (there should be 1 instance). If you have the `sed` command on your system you can do it easily using:
+This will change this in your `.travis.yml`:
 
-```
-sed -i.old 's/template-haskell-project/projectname/g' projectname.cabal
-sed -i.old 's/template-haskell-project/projectname/g' .travis.yml
-sed -i.old 's/template-haskell-project/projectname/g' README.md
-sed -i.old 's/template-haskell-project/projectname/g' run
+```yaml
+deploy:
+  provider: releases
+  api_key:
+    secure: (KEEP THIS)
+  file: ''
+  on:
+    repo: username/projectname
 ```
 
-with `.old` backup files being created in case something goes wrong.
+Replace this new `deploy` part by the one you have saved before but replacing the secure information by the one that has been generated for you.
 
-To test if all is ok you can use one or several of these commands:
+Travis will use your application itself as a way to get its version. So change the file `src/Lib.hs' as follows.
 
+Before:
+
+```haskell
+someFunc :: IO ()
+someFunc = putStrLn "someFunc"
 ```
-stack build
-stack test
-stack exec projectname-exe
-./run
+
+After:
+
+```haskell
+someFunc :: IO ()
+someFunc = putStrLn "0.1.0.0"
 ```
+
+You can also change directly `app/Main.hs`. What is important is that your application, when run, returns its version (later on you may want to have a command-line option to get the option as what I did [here](https://github.com/pascalpoizat/fbpmn)) and, accordingly, change the command used in `.travis.yml` file to retrieve the version.
+
+**Important:** whenever you change the version you will have to keep 3 things consistent:
+
+- the version in file `package.yaml` (`projectname.cabal` being then generated from it) or in file `projectname.cabal` (if there is no `package.yaml` file).
+- the version your application returns when being called.
+- the git tag that you push to GitHub.
+
+Now it is time to trigger a Travis build.
+
+```sh
+git add * .*
+git commit -m "initial CI commit"
+git push origin master 
+```
+
+If you go to your [Travis dashboard](https://travis-ci.org/dashboard) you should see your project building and then passing the build. But if you go to the GitHub release section of your repository, nothing appears.
+
+This is normal. To generate a release wrt. `master`, we have to add a tag on it.
+
+```sh
+git tag -a v0.1.0.0 -m "v0.1.0.0"
+git push origin --tags
+```
+
+Travis runs again but then deploys the binaries under the GitHub release section of your repository. You may comment this release and publish it for your visitors to see.
+
+Now let us move to branch `develop`, retrieve things from `master` and push to the repository.
+
+```sh
+git checkout develop
+git merge master
+git push origin develop
+```
+
+If you go to you the GitHub release section of your repository you can see that Travis has made a draft release. This release is visible only from your collaborators (you may of course publish it).
+
+To conclude:
+
+- each time you have a new stable version, create a version tag on `master` and Travis will create a final release.
+- each time you commit to `develop`, Travis will overwrite the SNAPSHOT draft release for for the current version at `develop` (usually the next one after the one at `master`).
+- create version tags only from `master`.
 
 ## Haskell notes
 
@@ -138,18 +177,23 @@ These are some interesting references related either to learning Haskell or that
 - [Haskell Wiki](https://wiki.haskell.org/FAQ)
 - [What I wish I knew when learning Haskell](http://dev.stephendiehl.com/hask/)
 
-### Libraries
+### Packages
 
-- [Hackage central package archive](https://hackage.haskell.org)
+Archives:
+
+- [Hackage](https://hackage.haskell.org) to look for nice packages to use in your applications.
+- [Stackage](https://www.stackage.org) to find which packages are in the LTS releases you will use with `stack`.
+
+Some packages:
+
 - [containers](https://hackage.haskell.org/package/containers) for various containers such as Set
 - [optparse-applicative](http://hackage.haskell.org/package/optparse-applicative) for parsing command line options
-- [fgl](http://hackage.haskell.org/package/fgl) for (inductive) graph structures
 - [aeson](https://hackage.haskell.org/package/aeson) for JSON related tasks
-- [HaXml](https://hackage.haskell.org/package/HaXml) for XML related tasks
+- [xml](https://hackage.haskell.org/package/xml) for simple XML related tasks or [HaXml](https://hackage.haskell.org/package/HaXml) for more complicated XML related tasks
 
 ### Testing
 
-- [Tasty](http://documentup.com/feuerbach/tasty) a testing framework that enables one to combine different kinds of testing (typically, the ones below)
+- [Tasty](http://documentup.com/feuerbach/tasty) a testing framework that combines different kinds of testing (typically, the ones below)
 - [HUnit](https://github.com/hspec/HUnit#readme) for unit testing
 - [SmallCheck](https://github.com/feuerbach/smallcheck#readme) for property based testing
 - [QuickCheck](https://github.com/nick8325/quickcheck#readme) for random based testing
@@ -161,7 +205,7 @@ These are some interesting references related either to learning Haskell or that
 - [Stack](https://haskellstack.org/) build system
 - [Cabal](https://www.haskell.org/cabal/) used by Stack
 - [Travis CI](https://travis-ci.org) for continuous integration
-- [Stack and Travis CI](https://docs.haskellstack.org/en/latest/travis_ci/) for continuous integration
+- [Stack and Travis CI](https://docs.haskellstack.org/en/stable/travis_ci/) for continuous integration
 - [HPC](https://wiki.haskell.org/Haskell_program_coverage) for code coverage
 - [Coveralls](https://coveralls.io) for code coverage
 - [stack-hpc-coveralls](https://github.com/rubik/stack-hpc-coveralls) for code coverage (does not seem to work with Stack lts-8.3)

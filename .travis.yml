@@ -1,25 +1,30 @@
-# adapted from:
-# https://docs.haskellstack.org/en/stable/travis_ci/
 sudo: true
+notifications:
+  email: false
 language: generic
+git:
+  depth: 5
 cache:
   directories:
-  - $HOME/.ghc
-  - $HOME/.cabal
-  - $HOME/.stack
-  - $TRAVIS_BUILD_DIR/.stack-work
+  - "$HOME/.ghc"
+  - "$HOME/.cabal"
+  - "$HOME/.stack"
+  - "$TRAVIS_BUILD_DIR/.stack-work"
 matrix:
   include:
-  - env: BUILD=stack ARGS="--resolver lts-12" OS=linux ARCH=x86_64
+  - env: BUILD=stack ARGS="--resolver lts-12" OS=linux ARCH=x86_64 BINDIR="$TRAVIS_BUILD_DIR/.stack-work/install/x86_64-linux/lts-12.26/8.4.4/bin"
     compiler: ": #stack 8.4.4"
-    addons: {apt: {packages: [libgmp-dev]}}
+    addons:
+      apt:
+        packages:
+        - libgmp-dev
     os: linux
-  - env: BUILD=stack ARGS="--resolver lts-12" OS=osx ARCH=x86_64
+  - env: BUILD=stack ARGS="--resolver lts-12" OS=osx ARCH=x86_64 BINDIR="$TRAVIS_BUILD_DIR/.stack-work/install/x86_64-osx/lts-12.26/8.4.4/bin"
     compiler: ": #stack 8.4.4 osx"
     os: osx
 before_install:
 - unset CC
-- export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$HOME/.local/bin:/opt/alex/$ALEXVER/bin:/opt/happy/$HAPPYVER/bin:$HOME/.cabal/bin:$PATH
+- export PATH=$HOME/.local/bin:$PATH
 - mkdir -p ~/.local/bin
 - |
   if [ `uname` = "Darwin" ]
@@ -33,7 +38,8 @@ before_install:
   # echo 'remote-repo: hackage.haskell.org:http://hackage.fpcomplete.com/' > $HOME/.cabal/config
   # echo 'remote-repo-cache: $HOME/.cabal/packages' >> $HOME/.cabal/config
 install:
-- echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+- echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo
+  '?')]"
 - if [ -f configure.ac ]; then autoreconf -i; fi
 - |
   set -ex
@@ -44,3 +50,52 @@ script:
   set -ex
   stack --no-terminal $ARGS test --bench --no-run-benchmarks --haddock --no-haddock-deps
   set +ex
+before_deploy:
+- export PROG=template-haskell-project-exe
+- |
+  if [ $TRAVIS_BRANCH = "develop" ]
+  then
+    export VERSION=$(${BINDIR}/${PROG})-SNAPSHOT
+  else
+    export VERSION=$(${BINDIR}/${PROG})
+  fi
+- export ARCHIVE="${BINDIR}/${PROG}-${VERSION}-${OS}.${ARCH}"
+- tar czf "${ARCHIVE}.tar.gz" -C ${BINDIR} ${PROG}
+- zip -j "${ARCHIVE}.zip" ${BINDIR}/${PROG}
+- export TRAVIS_TAG=v${VERSION}
+- |
+  if [ $TRAVIS_BRANCH = "develop" ]
+  then
+    git tag ${TRAVIS_TAG}
+    echo tag ${TRAVIS_TAG}
+  else
+    echo no tag
+  fi
+deploy:
+  - provider: releases
+    api_key:
+      secure: HsbREGVwE2R42Qq3CA1p3SYI/CCiEj6DLKww+yBKM2MQpa2RKu5igGTz5I3k1S5O85KEFhBTDm6uZ/ZNZS3/zuH813amUFmN6H269Bacypfrevb3TgLxT2VoxWNL3s4pklaD31zvX2g+0GPXgeVmx70Z/aeZKghXeFpwH22S/gtQqlWldQU+5Z7w1YFf74KN9JwKVjtClgewIYhtujD4Hki8QmJqKiOtr5eNHD7ATYSOtSSqk384qPbDKuJGjzESEbyZqZpgWCHCOA7NMWqMlM18LGFdQJGE6exN14iQMpM12g7ErIP+ss051FZsiusf7WNqoVGbuI5DsBVB8eb+5MJTryyfygFpM2H+ExtXx8nPAam/ygp32m4uPsjEbhw20oOplBDcx9oOnuWACwQNO5K0Gh0TCb7UH6he0yq2kP74potwAqhFiCkAP9mNmnX+l93Q7iZ/RrN8jw6M04uZqMrxi3NUGUy0cqgq7w+r/uFcdSLr464momgSqbtO5+Xf++YK1e9hqEqOQl9YUWadQkgWpa6/qwQB54ZLvYadUYqSvZqSkZnFamieziNVUPg8m9EPhLZJyEPATVkZbVIzaJvBh80ft67sfIk/+/7MCJBXvwj7+xK3ZaAVGjQFEnX2V55PfOXc+lGN08tr+0HRNf/XaxMI2+wT9gJX4ycxTIM=
+    file:
+      - ${ARCHIVE}.tar.gz
+      - ${ARCHIVE}.zip
+    skip_cleanup: true
+    overwrite: true
+    draft: false
+    on:
+      # branch: master
+      tags: true
+      all_branches: true
+    name: $TRAVIS_TAG
+  - provider: releases
+    api_key:
+      secure: HsbREGVwE2R42Qq3CA1p3SYI/CCiEj6DLKww+yBKM2MQpa2RKu5igGTz5I3k1S5O85KEFhBTDm6uZ/ZNZS3/zuH813amUFmN6H269Bacypfrevb3TgLxT2VoxWNL3s4pklaD31zvX2g+0GPXgeVmx70Z/aeZKghXeFpwH22S/gtQqlWldQU+5Z7w1YFf74KN9JwKVjtClgewIYhtujD4Hki8QmJqKiOtr5eNHD7ATYSOtSSqk384qPbDKuJGjzESEbyZqZpgWCHCOA7NMWqMlM18LGFdQJGE6exN14iQMpM12g7ErIP+ss051FZsiusf7WNqoVGbuI5DsBVB8eb+5MJTryyfygFpM2H+ExtXx8nPAam/ygp32m4uPsjEbhw20oOplBDcx9oOnuWACwQNO5K0Gh0TCb7UH6he0yq2kP74potwAqhFiCkAP9mNmnX+l93Q7iZ/RrN8jw6M04uZqMrxi3NUGUy0cqgq7w+r/uFcdSLr464momgSqbtO5+Xf++YK1e9hqEqOQl9YUWadQkgWpa6/qwQB54ZLvYadUYqSvZqSkZnFamieziNVUPg8m9EPhLZJyEPATVkZbVIzaJvBh80ft67sfIk/+/7MCJBXvwj7+xK3ZaAVGjQFEnX2V55PfOXc+lGN08tr+0HRNf/XaxMI2+wT9gJX4ycxTIM=
+    file:
+      - ${ARCHIVE}.tar.gz
+      - ${ARCHIVE}.zip
+    skip_cleanup: true
+    overwrite: true
+    draft: true
+    on:
+      branch: develop
+      tags: false
+    name: $TRAVIS_TAG
