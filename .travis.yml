@@ -10,10 +10,11 @@ cache:
   - $TRAVIS_BUILD_DIR/.stack-work
 matrix:
   include:
-  - env: BUILD=stack ARGS="--resolver lts-12"
+  - env: BUILD=stack ARGS="--resolver lts-12" OS=linux ARCH=x86_64
     compiler: ": #stack 8.4.4"
     addons: {apt: {packages: [libgmp-dev]}}
-  - env: BUILD=stack ARGS="--resolver lts-12"
+    os: linux
+  - env: BUILD=stack ARGS="--resolver lts-12" OS=osx ARCH=x86_64
     compiler: ": #stack 8.4.4 osx"
     os: osx
 before_install:
@@ -23,9 +24,9 @@ before_install:
 - |
   if [ `uname` = "Darwin" ]
   then
-    travis_retry curl --insecure -L https://get.haskellstack.org/stable/osx-x86_64.tar.gz | tar xz --strip-components=1 --include '*/stack' -C ~/.local/bin OS=osx ARCH=x86_64
+    travis_retry curl --insecure -L https://get.haskellstack.org/stable/osx-x86_64.tar.gz | tar xz --strip-components=1 --include '*/stack' -C ~/.local/bin
   else
-    travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack' OS=linux ARCH=x86_64
+    travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
   fi
   # Use the more reliable S3 mirror of Hackage
   # mkdir -p $HOME/.cabal
