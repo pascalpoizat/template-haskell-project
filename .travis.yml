@@ -1,39 +1,45 @@
-# This is the simple Travis configuration, which is intended for use
-# on applications which do not require cross-platform and
-# multiple-GHC-version support. For more information and other
-# options, see:
-#
+# adapted from:
 # https://docs.haskellstack.org/en/stable/travis_ci/
-#
-sudo: false
-
+sudo: true
 language: generic
-
-env:
-  - GHCVER=8.0.1 STACK_YAML=stack.yaml
-#   - GHCVER=8.0.2 STACK_YAML=stack.yaml
-
 cache:
   directories:
-    - ~/.stack
-
-addons:
-  apt:
-    packages:
-      - libgmp-dev
-
+  - $HOME/.ghc
+  - $HOME/.cabal
+  - $HOME/.stack
+  - $TRAVIS_BUILD_DIR/.stack-work
+matrix:
+  include:
+  - env: BUILD=stack ARGS="--resolver lts-12"
+    compiler: ": #stack 8.4.4"
+    addons: {apt: {packages: [libgmp-dev]}}
+  - env: BUILD=stack ARGS="--resolver lts-12"
+    compiler: ": #stack 8.4.4 osx"
+    os: osx
 before_install:
-  - mkdir -p ~/.local/bin
-  - export PATH=$HOME/.local/bin:$PATH
-  - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-
+- unset CC
+- export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$HOME/.local/bin:/opt/alex/$ALEXVER/bin:/opt/happy/$HAPPYVER/bin:$HOME/.cabal/bin:$PATH
+- mkdir -p ~/.local/bin
+- |
+  if [ `uname` = "Darwin" ]
+  then
+    travis_retry curl --insecure -L https://get.haskellstack.org/stable/osx-x86_64.tar.gz | tar xz --strip-components=1 --include '*/stack' -C ~/.local/bin OS=osx ARCH=x86_64
+  else
+    travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack' OS=linux ARCH=x86_64
+  fi
+  # Use the more reliable S3 mirror of Hackage
+  # mkdir -p $HOME/.cabal
+  # echo 'remote-repo: hackage.haskell.org:http://hackage.fpcomplete.com/' > $HOME/.cabal/config
+  # echo 'remote-repo-cache: $HOME/.cabal/packages' >> $HOME/.cabal/config
 install:
-  - stack --no-terminal --install-ghc test --only-dependencies
-#  - stack install stack-hpc-coveralls
-
+- echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+- if [ -f configure.ac ]; then autoreconf -i; fi
+- |
+  set -ex
+  stack --no-terminal --install-ghc $ARGS test --bench --only-dependencies
+  set +ex
 script:
-  - stack test :template-haskell-project-test --no-terminal --coverage --haddock --no-haddock-deps
-
-after_script:
-  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.4.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
-  - ./shc template-haskell-project template-haskell-project-test
+- |
+  set -ex
+  stack --no-terminal $ARGS test --bench --no-run-benchmarks --haddock --no-haddock-deps
+  set +ex

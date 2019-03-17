@@ -20,7 +20,7 @@ module Lib
 
 -- |A sample function printing out a sample string.
 someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+someFunc = putStrLn "0.1.2.0"
 
 -- |A Point.
 data Point = Point {x:: Int, y:: Int}
