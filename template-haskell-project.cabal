@@ -7,7 +7,7 @@ license:             Apache-2.0
 license-file:        LICENSE
 author:              Pascal Poizat
 maintainer:          pascal.poizat@lip6.fr
-copyright:           2017 Pascal Poizat
+copyright:           2017-2022 Pascal Poizat
 category:            Template
 build-type:          Simple
 extra-source-files:  README.md
