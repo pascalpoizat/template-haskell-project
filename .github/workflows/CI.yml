@@ -55,38 +55,30 @@ jobs:
     - name: test
       run: |
         stack test --system-ghc
-    - name: set OS and ARCH (linux x86)
+    - name: set OS (linux x86)
       if: ${{ runner.os }}==ubuntu-latest
-      shell: bash
-      run: |
-        echo linux setup
-        echo os=linux >> $GITHUB_ENV
-        echo arch=x86_64 >> $GITHUB_ENV
-    - name: set OS and ARCH (mac x86)
+      run: echo os=linux >> $GITHUB_ENV
+    - name: set OS (mac x86)
       if: ${{ runner.os }}==macOS-latest
-      shell: bash
-      run: |
-        echo macOS setup
-        echo os=osx >> $GITHUB_ENV
-        echo arch=x86_64 >> $GITHUB_ENV
-    - name: set OS and ARCH (windows)
+      run: echo os=osx >> $GITHUB_ENV
+    - name: set OS (windows)
       if: ${{ runner.os }}==windows-latest
-      shell: bash
+      run: echo os=windows >> $GITHUB_ENV
+    - name: set ARCH (always x86_64 by now)
+      run: echo arch="x86_64" >> $GITHUB_ENV
+    - name: set bin path
+      run: echo "{bin_path}={`stack path --local-bin`}" >> $GITHUB_ENV
+    - name: set version
+      run: echo "{version}={${{ github.ref }}}" >> $GITHUB_ENV
+    - name: set archive name
+      run: echo "{archive}={${{ env.bin_path }}/${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}}" >> $GITHUB_ENV
+    - name: information
+      bash: shell
       run: |
-        echo windows setup
-        echo os=windows >> $GITHUB_ENV
-        echo arch=x86_64 >> $GITHUB_ENV
-    - name: build release files
-      # if: startsWith(github.ref, 'refs/tags/')
-      shell: bash
-      run: |
-        echo "{bin_path}={`stack path --local-bin`}" >> $GITHUB_ENV
-        echo "{version}={${{ github.ref }}}" >> $GITHUB_ENV
-        echo "{archive}={${{ env.bin_path }}/${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}}" >> $GITHUB_ENV
-      # tar czf ${{ env.archive }}.tar.gz -C ${{ env.bin_path }} ${{ env.program }}
         echo ${{ env.archive }}.tar.gz built
-      # zip -j  ${{ env.archive }}.zip       ${{ env.bin_path }}/${{ env.program }}
-        echo ${{ env.archive }}.zip build
+        echo ${{ env.archive }}.zip built
+    # tar czf ${{ env.archive }}.tar.gz -C ${{ env.bin_path }} ${{ env.program }}
+    # zip -j  ${{ env.archive }}.zip       ${{ env.bin_path }}/${{ env.program }}
     # - name: release
     #   uses: softprops/action-gh-release@v1
     #   if: startsWith(github.ref, 'refs/tags/')
