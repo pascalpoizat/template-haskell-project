@@ -12,6 +12,7 @@
 # - softprops/action-gh-release (1)
 #     https://github.com/softprops/action-gh-release
 
+# TODO: add cache for GHC+stack installation
 # TODO: add artifact release
 
 name: CI
@@ -55,18 +56,18 @@ jobs:
       run: |
         stack test --system-ghc
     - name: set OS (linux x86)
-      if: ${{ runner.os }}==ubuntu-latest
+      if: startsWith(matrix.os, 'ubuntu')
       run: echo os=linux >> $GITHUB_ENV
     - name: set OS (mac x86)
-      if: ${{ runner.os }}==macOS-latest
+      if: startsWith(matrix.os, 'macOS')
       run: echo os=osx >> $GITHUB_ENV
     - name: set OS (windows)
-      if: ${{ runner.os }}==windows-latest
+      if: startsWith(matrix.os, 'window')
       run: echo os=windows >> $GITHUB_ENV
     - name: set ARCH (always x86_64 by now)
       run: echo arch="x86_64" >> $GITHUB_ENV
     - name: set bin path
-      run: echo "{bin_path}={`stack path --local-bin`}" >> $GITHUB_ENV
+      run: echo "{bin_path}={`stack path --system-ghc --local-bin`}" >> $GITHUB_ENV
     - name: set version
       run: echo "{version}={${{ github.ref }}}" >> $GITHUB_ENV
     - name: set archive name
