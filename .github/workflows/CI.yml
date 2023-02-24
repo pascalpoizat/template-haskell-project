@@ -22,7 +22,7 @@ on:
 jobs:
   build:
     name: build-${{ matrix.ghc }}-${{ matrix.stack }}-${{ matrix.os }}
-    runs-on: $${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         ghc: ['9.2.5']
