@@ -103,7 +103,7 @@ jobs:
     # setting archive name
     #
     - name: set archive name (linux and macOS)
-      if: ! startsWith(matrix.os 'windows')
+      if: startsWith(matrix.os 'windows') != true
       run: echo "archive=${{ env.bin_path }}/${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}" >> $GITHUB_ENV
     - name: set archive name (windows)
       if: startsWith(matrix.os 'windows')
