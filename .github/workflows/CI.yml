@@ -9,7 +9,7 @@ name: CI
 # run when push on main
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build:
