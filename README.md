@@ -2,13 +2,13 @@
 
 A simple template for Haskell projects built with Stack 
 
-Tested with Stack 1.9.3 and resolver lts-12.26 / GHC 8.4.4.
+Tested with Stack 2.9.1 and resolver lts-20.5 / GHC 9.2.5.
 
 **new: support for multiple builds and binaries deployment**
 
-*soon (maybe): coverage information using coveralls.io*
+*soon (maybe): updated information on how to install the Haskell tool suite (ghcup, GHC, cabal, stack, language server, ...), coverage information using coveralls.io*
 
-[![Build Status](https://img.shields.io/travis/pascalpoizat/template-haskell-project/master.svg?style=flat-square)](https://travis-ci.org/pascalpoizat/template-haskell-project)
+[![Build Status](https://img.shields.io/travis/pascalpoizat/template-haskell-project/master.svg?style=flat-square)](https://app.travis-ci.com/github/pascalpoizat/template-haskell-project)
 [![License](https://img.shields.io/github/license/pascalpoizat/template-haskell-project.svg?style=flat-square)](LICENSE)
 [![Version](https://img.shields.io/github/tag/pascalpoizat/template-haskell-project.svg?label=version&style=flat-square)](template-haskell-project.cabal)<br/>
 <!--
@@ -24,7 +24,7 @@ Tested with Stack 1.9.3 and resolver lts-12.26 / GHC 8.4.4.
 The first step to create your project is:
 
 ```
-stack new projectname --resolver lts-12
+stack new projectname --resolver lts-20
 ```
 
 To test if all is ok, run:
@@ -65,13 +65,15 @@ git checkout master
 
 ## Adding continuous integration to the picture
 
+** THIS PART SHOULD BE UPDATED WITH THE MOVE TO travis-ci.com**
+
 We will use [Travis CI](https://travis-ci.org).
 
 Our objective is:
 
 - have the CI build your application with `stack` for 2 environments
-	- LTS-12.26, GHC 8.4.4, linux, x86_64
-	- LTS-12.26, GHC 8.4.4, osx, x86_64
+	- LTS-20.5, GHC 9.2.5, linux, x86_64
+	- LTS-20.5, GHC 9.2.5, osx, x86_64
 - have the CI deploy binaries to GitHub releases
 	- a final release for tagged commits (in our scenario, make tags only on branch `master`)
 	- a draft release for commits on branch `develop`)
