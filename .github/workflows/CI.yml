@@ -1,0 +1,40 @@
+# documentation
+# https://github.com/haskell/actions
+# https://kodimensional.dev/github-actions
+# TODO: add caching
+# TODO: add artifact release
+
+name: CI
+
+# run when push on main
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: build / ghc $${{ matrix.ghc }} / stack ${{ matrix.stack }} / ${{ matrix.os }}
+    runs-on: $${{ matrix.os }}
+    strategy:
+      matrix:
+        ghc: ['9.2.5']
+        stack: ['2.9.1']
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: haskell/actions/setup@v2
+      name: stack setup
+      with:
+        ghc-version: ${{ matrix.ghc }}
+        enable-stack: true
+        stack-version: ${{ matrix.stack }}
+    - name: install dependencies
+      run: |
+        stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks --only-dependencies
+    - name: build
+      run: |
+        stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks
+    - name: test
+      run: |
+        stack test --system-ghc
+
