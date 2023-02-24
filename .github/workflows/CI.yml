@@ -67,9 +67,10 @@ jobs:
     - name: set ARCH (always x86_64 by now)
       run: echo arch="x86_64" >> $GITHUB_ENV
     - name: set bin path
-      run: echo "bin_path=`stack path --system-ghc --local-bin`" >> $GITHUB_ENV
+      shell: bash
+      run: echo "bin_path=`stack path --system-ghc --local-install-root`/bin" >> $GITHUB_ENV
     - name: set version
-      run: echo "version=${{ github.ref }}" >> $GITHUB_ENV
+      run: echo "version=`${{ env.bin_path}}/${{ env.program}} version`" >> $GITHUB_ENV
     - name: set archive name
       run: echo "archive=${{ env.bin_path }}/${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}" >> $GITHUB_ENV
     - name: information
