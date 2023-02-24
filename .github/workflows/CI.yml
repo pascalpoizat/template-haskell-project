@@ -1,7 +1,15 @@
 # documentation
 # https://github.com/haskell/actions
 # https://kodimensional.dev/github-actions
-# TODO: add caching
+
+# uses
+# - actions/checkout (3)
+#     https://github.com/marketplace/actions/checkout
+# - actions/cache (3)
+#     https://github.com/marketplace/actions/cache
+# - haskell/actions/setup (2)
+#     https://github.com/haskell/actions
+
 # TODO: add artifact release
 
 name: CI
@@ -13,7 +21,7 @@ on:
 
 jobs:
   build:
-    name: build / ghc ${{ matrix.ghc }} / stack ${{ matrix.stack }} / ${{ matrix.os }}
+    name: build-${{ matrix.ghc }}-${{ matrix.stack }}-${{ matrix.os }}
     runs-on: $${{ matrix.os }}
     strategy:
       matrix:
@@ -28,6 +36,11 @@ jobs:
         ghc-version: ${{ matrix.ghc }}
         enable-stack: true
         stack-version: ${{ matrix.stack }}
+    - uses: actions/cache@v3
+      name: cache ~/.stack
+      with:
+        path: ~/.stack
+        key: stack-${{ matrix.ghc }}-${{ matrix.stack }}-${{ runner.os }}
     - name: install dependencies
       run: |
         stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks --only-dependencies
