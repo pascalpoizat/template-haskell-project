@@ -72,7 +72,6 @@ jobs:
     - name: set archive name
       run: echo "{archive}={${{ env.bin_path }}/${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}}" >> $GITHUB_ENV
     - name: information
-      bash: shell
       run: |
         echo ${{ env.archive }}.tar.gz built
         echo ${{ env.archive }}.zip built
