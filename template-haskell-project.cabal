@@ -1,5 +1,5 @@
 name:                template-haskell-project
-version:             0.1.2.0
+version:             0.1.3.0
 synopsis:            Initial version
 description:         Please see README.md
 homepage:            https://github.com/pascalpoizat/template-haskell-project#readme
@@ -7,7 +7,7 @@ license:             Apache-2.0
 license-file:        LICENSE
 author:              Pascal Poizat
 maintainer:          pascal.poizat@lip6.fr
-copyright:           2017-2022 Pascal Poizat
+copyright:           2017-2023 Pascal Poizat
 category:            Template
 build-type:          Simple
 extra-source-files:  README.md
