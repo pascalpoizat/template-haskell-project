@@ -59,23 +59,23 @@ jobs:
       if: ${{ runner.os }}==ubuntu-latest
       shell: bash
       run: |
-        echo "linux setup"
-        echo "{os}={linux}" >> $GITHUB_ENV
-        echo "{arch}={x86_64}" >> $GITHUB_ENV
+        echo linux setup
+        echo os=linux >> $GITHUB_ENV
+        echo arch=x86_64 >> $GITHUB_ENV
     - name: set OS and ARCH (mac x86)
       if: ${{ runner.os }}==macOS-latest
       shell: bash
       run: |
-        echo "macOS setup"
-        echo "{os}={osx}" >> $GITHUB_ENV
-        echo "{arch}={x86_64}" >> $GITHUB_ENV
+        echo macOS setup
+        echo os=osx >> $GITHUB_ENV
+        echo arch=x86_64 >> $GITHUB_ENV
     - name: set OS and ARCH (windows)
       if: ${{ runner.os }}==windows-latest
       shell: bash
       run: |
-        echo "windows setup"
-        echo "{os}={windows}" >> $GITHUB_ENV
-        echo "{arch}={x86_64}" >> $GITHUB_ENV
+        echo windows setup
+        echo os=windows >> $GITHUB_ENV
+        echo arch=x86_64 >> $GITHUB_ENV
     - name: build release files
       # if: startsWith(github.ref, 'refs/tags/')
       shell: bash
