@@ -18,9 +18,9 @@
 # TODO: option to release snapshot versions
 # TODO: make one workflow for each OS
 
-# Note: zip is removed for linux and macOS
-# if needed this can be added
-# zip -j ${{ env.archive }}.zip ${{ env.bin_path }}/${{ env.program }}
+# Notes:
+# - zip is removed for linux and macOS, if needed this can be added: zip -j ${{ env.archive }}.zip ${{ env.bin_path }}/${{ env.program }}
+# - tags activating releases should begin with v (eg: v1.0.0)
 
 name: CI
 
@@ -32,7 +32,6 @@ env:
   lts: 20.5
   program: template-haskell-project-exe
   version: 0.1.3.0
-  api_key: HsbREGVwE2R42Qq3CA1p3SYI/CCiEj6DLKww+yBKM2MQpa2RKu5igGTz5I3k1S5O85KEFhBTDm6uZ/ZNZS3/zuH813amUFmN6H269Bacypfrevb3TgLxT2VoxWNL3s4pklaD31zvX2g+0GPXgeVmx70Z/aeZKghXeFpwH22S/gtQqlWldQU+5Z7w1YFf74KN9JwKVjtClgewIYhtujD4Hki8QmJqKiOtr5eNHD7ATYSOtSSqk384qPbDKuJGjzESEbyZqZpgWCHCOA7NMWqMlM18LGFdQJGE6exN14iQMpM12g7ErIP+ss051FZsiusf7WNqoVGbuI5DsBVB8eb+5MJTryyfygFpM2H+ExtXx8nPAam/ygp32m4uPsjEbhw20oOplBDcx9oOnuWACwQNO5K0Gh0TCb7UH6he0yq2kP74potwAqhFiCkAP9mNmnX+l93Q7iZ/RrN8jw6M04uZqMrxi3NUGUy0cqgq7w+r/uFcdSLr464momgSqbtO5+Xf++YK1e9hqEqOQl9YUWadQkgWpa6/qwQB54ZLvYadUYqSvZqSkZnFamieziNVUPg8m9EPhLZJyEPATVkZbVIzaJvBh80ft67sfIk/+/7MCJBXvwj7+xK3ZaAVGjQFEnX2V55PfOXc+lGN08tr+0HRNf/XaxMI2+wT9gJX4ycxTIM=
 jobs:
   build:
     name: build-${{ matrix.ghc }}-${{ matrix.stack }}-${{ matrix.os }}
@@ -135,11 +134,11 @@ jobs:
     #
     - name: release
       uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
+      if: startsWith(github.ref, 'refs/tags/v')
       with:
         # tag_name: defaults to github.ref
         # name: defaults to tag name
         append_body: true
-        # token: defaults to ${{ github.token }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         files: |
           ${{ env.archive_path }}
