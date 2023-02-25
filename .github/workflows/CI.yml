@@ -120,24 +120,24 @@ jobs:
       run: |
         tar czf ${{ env.archive }}.tar.gz -C ${{ env.bin_path }} ${{ env.program }}
         echo archive ${{ env.archive }}.tar.gz created in ${{ env.bin_path }} from ${{ env.bin_path }}/${{ env.program }}
+        echo "archive_path=${{ env.bin_path }}/${{ env.archive }}.tar.gz" >> $GITHUB_ENV
     - name: make archive (windows)
       if: startsWith(matrix.os, 'windows')
       run: |
-        $file = JoinPath $Env:bin_path $Env:program+".exe"
-        $dest = JoinPath $Env:bin_path $Env:archive+".zip"
-        Get-ChildItem $file | Compress-Archive -DestinationPath $dest
+        $file = Join-Path $Env:bin_path $Env:program+".exe"
+        $pwsh_archive_path = Join-Path $Env:bin_path $Env:archive+".zip"
+        Get-ChildItem $file | Compress-Archive -DestinationPath $pwsh_archive_path
         echo archive $Env:archive+".zip" created in $Env:bin_path from $file
-    # 
-    # 
-    # - name: release
-    #   uses: softprops/action-gh-release@v1
-    #   if: startsWith(github.ref, 'refs/tags/')
-    #   with:
-    #     # tag_name: defaults to github.ref
-    #     # name: defaults to tag name
-    #     append_body: true
-    #     token: ${{ api_key }}
-    #     files: |
-    #       ${{ env.archive }}.tar.gz
-    #       ${{ env.archive }}.zip
-
+        echo "archive_path=$pwsh_archive_path" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+    #
+    # release
+    #
+    - name: release
+      uses: softprops/action-gh-release@v1
+      with:
+        # tag_name: defaults to github.ref
+        # name: defaults to tag name
+        append_body: true
+        # token: defaults to ${{ github.token }}
+        files: |
+          ${{ env.archive_path }}
