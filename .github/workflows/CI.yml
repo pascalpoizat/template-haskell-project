@@ -48,15 +48,9 @@ jobs:
     #
     # caches
     #
-    - name: cache ~/.stack (linux x86)
+    - name: cache ~/.stack (linux and macOS)
       uses: actions/cache@v3
-      if: startsWith(matrix.os, 'ubuntu')
-      with:
-        path: ~/.stack
-        key: stack-${{ matrix.ghc }}-${{ matrix.stack }}-${{ runner.os }}
-    - name: cache ~/.stack (macOS x86)
-      uses: actions/cache@v3
-      if: startsWith(matrix.os, 'macOS')
+      if: startsWith(matrix.os, 'windows') != true
       with:
         path: ~/.stack
         key: stack-${{ matrix.ghc }}-${{ matrix.stack }}-${{ runner.os }}
@@ -96,18 +90,24 @@ jobs:
     - name: set variables (windows)
       if: startsWith(matrix.os, 'windows')
       run: |
-        echo os=windows >> $GITHUB_ENV
-        echo arch="x86_64" >> $GITHUB_ENV
-        echo bin_path=(& stack path --system-ghc --local-install-root)+"\bin" >> $GITHUB_ENV
+        echo "os=windows" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "arch=x86_64" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        $pwsh_bin_path = Join-Path (& stack path --system-ghc --local-install-root) bin
+        echo "bin_path=$pwsh_bin_path" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      shell: pwsh
     #
     # setting archive name
     #
     - name: set archive name (linux and macOS)
       if: startsWith(matrix.os, 'windows') != true
-      run: echo "archive=${{ env.bin_path }}/${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}" >> $GITHUB_ENV
+      run: |
+        echo "archive=${{ env.bin_path }}/${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}" >> $GITHUB_ENV
     - name: set archive name (windows)
       if: startsWith(matrix.os, 'windows')
-      run: echo "archive=${{ env.bin_path }}\${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}" >> $GITHUB_ENV
+      run: |
+        $pwsh_archive = Join-Path $Env:bin_path $Env:program-$Env:version-$Env:os.$Env:arch
+        echo "archive=$pwsh_archive" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+      shell: pwsh
     #
     # make archive
     #
