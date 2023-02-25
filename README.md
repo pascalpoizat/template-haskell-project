@@ -31,7 +31,7 @@ Installing the environment is simplified using [GHCup](https://www.haskell.org/g
 
 A simple (and [feature-rich](https://haskell-language-server.readthedocs.io/en/stable/features.html)) solution is to use the [Haskell Language Server](https://haskell-language-server.readthedocs.io/en/stable/) (HLS) which can be installed using GHCup as [presented here](https://haskell-language-server.readthedocs.io/en/stable/installation.html#ghcup), and have your IDE work with it.
 
-For [Visual Studio Code]() you can use the [Haskell plugin](https://marketplace.visualstudio.com/items?itemName=haskell.haskell), which is able to download HLS by need for you (indeed, it uses GHCUp for this).
+For [Visual Studio Code](https://code.visualstudio.com) you can use the [Haskell plugin](https://marketplace.visualstudio.com/items?itemName=haskell.haskell), which is able to download HLS by need for you (indeed, it uses GHCUp for this).
 
 But HLS works with [many more](https://haskell-language-server.readthedocs.io/en/latest/configuration.html#configuring-your-editor) IDEs.
 
