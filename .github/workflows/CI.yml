@@ -13,13 +13,14 @@
 #     https://github.com/softprops/action-gh-release
 
 # TODO: check and add caching if needed
-# TODO: add artifact release
 # TODO: automatize setting program & version
-# TODO: use variable for LTS
+# TODO: don't build archives if not to be released
+# TODO: option to release snapshot versions
+# TODO: make one workflow for each OS
 
 # Note: zip is removed for linux and macOS
 # if needed this can be added
-# zip -j  ${{ env.archive }}.zip       ${{ env.bin_path }}/${{ env.program }}
+# zip -j ${{ env.archive }}.zip ${{ env.bin_path }}/${{ env.program }}
 
 name: CI
 
@@ -124,8 +125,8 @@ jobs:
     - name: make archive (windows)
       if: startsWith(matrix.os, 'windows')
       run: |
-        $file = Join-Path $Env:bin_path $Env:program+".exe"
-        $pwsh_archive_path = Join-Path $Env:bin_path $Env:archive+".zip"
+        $file = Join-Path $Env:bin_path ($Env:program+".exe")
+        $pwsh_archive_path = Join-Path $Env:bin_path ($Env:archive+".zip")
         Get-ChildItem $file | Compress-Archive -DestinationPath $pwsh_archive_path
         echo archive $Env:archive+".zip" created in $Env:bin_path from $file
         echo "archive_path=$pwsh_archive_path" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
