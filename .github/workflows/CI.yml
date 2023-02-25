@@ -9,20 +9,22 @@
 #     https://github.com/marketplace/actions/cache
 # - haskell/actions/setup (2)
 #     https://github.com/haskell/actions
-# - softprops/action-gh-release (1)
+# - softprops/action-gh-release (1) [seems no longer maintained]
 #     https://github.com/softprops/action-gh-release
-# - ncipollo/release-action (1) (this is an alternative, not used)
+# - ncipollo/release-action (1) [possible replacement]
 #     https://github.com/ncipollo/release-action
 
 # TODO: check and add caching if needed
 # TODO: automatize setting program & version
-# TODO: don't build archives if not to be released
 # TODO: option to release snapshot versions
 # TODO: make one workflow for each OS ?
 
+# Requirements:
+# - tags activating releases should begin with v (eg: v1.0.0) [checked]
+# - tags should only be done on "master" commits [not checked]
+
 # Notes:
 # - zip is removed for linux and macOS, if needed this can be added: zip -j ${{ env.archive }}.zip ${{ env.bin_path }}/${{ env.program }}
-# - tags activating releases should begin with v (eg: v1.0.0)
 # - startsWith(github.ref, 'refs/tags/v') is not working with on:push:branches:[master]
 #   so we use on:push:tags: but then it is not checked if the branch is master/main
 
@@ -125,6 +127,7 @@ jobs:
         tar czf ${{ env.archive }}.tar.gz -C ${{ env.bin_path }} ${{ env.program }}
         echo archive ${{ env.archive }}.tar.gz created in ${{ env.bin_path }} from ${{ env.bin_path }}/${{ env.program }}
         echo "archive_path=${{ env.bin_path }}/${{ env.archive }}.tar.gz" >> $GITHUB_ENV
+        echo "archive_type=application/tar+gzip" >> $GITHUB_ENV
     - name: make archive (windows)
       if: startsWith(matrix.os, 'windows')
       run: |
@@ -133,15 +136,27 @@ jobs:
         Get-ChildItem $file | Compress-Archive -DestinationPath $pwsh_archive_path
         echo archive ($Env:archive+".zip") created in $Env:bin_path from $file
         echo "archive_path=$pwsh_archive_path" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        echo "archive_type=application/zip" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     #
     # release
     #
-    - name: release
-      uses: softprops/action-gh-release@v1
+    # OLD VERSION NOT WORKING
+    # - name: release
+    #   uses: softprops/action-gh-release@v1
+    #   with:
+    #     # tag_name: defaults to github.ref
+    #     # name: defaults to tag name
+    #     # token: default to ${{ secrets.GITHUB_TOKEN }}
+    #     append_body: true
+    #     files: |
+    #       ${{ env.archive_path }}
+    # NEW VERSION
+    - name : release
+      uses: ncipollo/release-action@v1
       with:
-        # tag_name: defaults to github.ref
-        # name: defaults to tag name
-        # token: default to ${{ secrets.GITHUB_TOKEN }}
-        append_body: true
-        files: |
-          ${{ env.archive_path }}
+        # draft: false
+        # prerelease: false
+        # replacesArtifacts: true
+        artifactErrorsFailBuild: true
+        artifacts: ${{ env.archive_path }}
+        artifactContentType: $${{ env.archive_type }}
