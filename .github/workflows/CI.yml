@@ -125,16 +125,16 @@ jobs:
       if: startsWith(matrix.os, 'windows') != true
       run: |
         tar czf ${{ env.archive }}.tar.gz -C ${{ env.bin_path }} ${{ env.program }}
-        echo archive ${{ env.archive }}.tar.gz created in ${{ env.bin_path }} from ${{ env.bin_path }}/${{ env.program }}
-        echo "archive_path=${{ env.bin_path }}/${{ env.archive }}.tar.gz" >> $GITHUB_ENV
+        echo archive ${{ env.archive }}.tar.gz created from ${{ env.bin_path }}/${{ env.program }}
+        echo "archive_path=${{ env.archive }}.tar.gz" >> $GITHUB_ENV
         echo "archive_type=application/tar+gzip" >> $GITHUB_ENV
     - name: make archive (windows)
       if: startsWith(matrix.os, 'windows')
       run: |
         $file = Join-Path $Env:bin_path ($Env:program+".exe")
-        $pwsh_archive_path = Join-Path $Env:bin_path ($Env:archive+".zip")
+        $pwsh_archive_path = ($Env:archive+".zip")
         Get-ChildItem $file | Compress-Archive -DestinationPath $pwsh_archive_path
-        echo archive ($Env:archive+".zip") created in $Env:bin_path from $file
+        echo archive ($Env:archive+".zip") created from $file
         echo "archive_path=$pwsh_archive_path" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
         echo "archive_type=application/zip" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     #
@@ -156,7 +156,7 @@ jobs:
         echo ${{ env.archive_path }}
         echo ${{ env.archive_type }}
         pwd
-        ls
+        ls -al
       shell: bash
     - name: release
       uses: ncipollo/release-action@v1.12.0
