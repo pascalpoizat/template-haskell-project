@@ -130,10 +130,11 @@ jobs:
         echo archive $Env:archive+".zip" created in $Env:bin_path from $file
         echo "archive_path=$pwsh_archive_path" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     #
-    # release
+    # release (if on a tag)
     #
     - name: release
       uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
       with:
         # tag_name: defaults to github.ref
         # name: defaults to tag name
