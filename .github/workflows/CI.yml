@@ -146,7 +146,7 @@ jobs:
     # release (if on a tag)
     #
     - name: release
-      use: ncipollo/release-action@v1
+      uses: ncipollo/release-action@v1
       if: startsWith(github.ref, 'refs/tags/v')
       with:
         artifacts: ${{ archive_path }}
