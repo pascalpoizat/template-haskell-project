@@ -128,7 +128,7 @@ jobs:
         $file = Join-Path $Env:bin_path ($Env:program+".exe")
         $pwsh_archive_path = Join-Path $Env:bin_path ($Env:archive+".zip")
         Get-ChildItem $file | Compress-Archive -DestinationPath $pwsh_archive_path
-        echo archive $Env:archive+".zip" created in $Env:bin_path from $file
+        echo archive ($Env:archive+".zip") created in $Env:bin_path from $file
         echo "archive_path=$pwsh_archive_path" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     #
     # release (if on a tag)
