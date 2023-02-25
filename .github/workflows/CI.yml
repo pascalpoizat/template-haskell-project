@@ -12,11 +12,10 @@
 # - softprops/action-gh-release (1)
 #     https://github.com/softprops/action-gh-release
 
-# TODO: add cache fro stack dependencies under windows
-# TODO: add cache for GHC+stack installation
+# TODO: check and add caching if needed
 # TODO: add artifact release
-# TODO: regroup/clean ifs by os
 # TODO: automatize setting program & version
+# TODO: use variable for LTS
 
 name: CI
 
@@ -31,7 +30,7 @@ env:
   api_key: HsbREGVwE2R42Qq3CA1p3SYI/CCiEj6DLKww+yBKM2MQpa2RKu5igGTz5I3k1S5O85KEFhBTDm6uZ/ZNZS3/zuH813amUFmN6H269Bacypfrevb3TgLxT2VoxWNL3s4pklaD31zvX2g+0GPXgeVmx70Z/aeZKghXeFpwH22S/gtQqlWldQU+5Z7w1YFf74KN9JwKVjtClgewIYhtujD4Hki8QmJqKiOtr5eNHD7ATYSOtSSqk384qPbDKuJGjzESEbyZqZpgWCHCOA7NMWqMlM18LGFdQJGE6exN14iQMpM12g7ErIP+ss051FZsiusf7WNqoVGbuI5DsBVB8eb+5MJTryyfygFpM2H+ExtXx8nPAam/ygp32m4uPsjEbhw20oOplBDcx9oOnuWACwQNO5K0Gh0TCb7UH6he0yq2kP74potwAqhFiCkAP9mNmnX+l93Q7iZ/RrN8jw6M04uZqMrxi3NUGUy0cqgq7w+r/uFcdSLr464momgSqbtO5+Xf++YK1e9hqEqOQl9YUWadQkgWpa6/qwQB54ZLvYadUYqSvZqSkZnFamieziNVUPg8m9EPhLZJyEPATVkZbVIzaJvBh80ft67sfIk/+/7MCJBXvwj7+xK3ZaAVGjQFEnX2V55PfOXc+lGN08tr+0HRNf/XaxMI2+wT9gJX4ycxTIM=
 jobs:
   build:
-    name: build ghc-${{ matrix.ghc }}.stack-${{ matrix.stack }}.lts-${{ env.lts }}.${{ runner.os }}
+    name: build ghc:${{ matrix.ghc }}-stack:${{ matrix.stack }}-lts:20.5-${{ runner.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -54,13 +53,13 @@ jobs:
       if: startsWith(matrix.os, 'windows') != true
       with:
         path: ~/.stack
-        key: ghc-${{ matrix.ghc }}.stack-${{ matrix.stack }}.lts-${{ env.lts }}.${{ runner.os }}
+        key: ghc:${{ matrix.ghc }}-stack:${{ matrix.stack }}-lts:20.5-${{ runner.os }}
     - name: cache C:\sr\snapshots (windows x86)
       uses: actions/cache@v3
       if: startsWith(matrix.os, 'windows')
       with:
         path: C:\sr\snapshots
-        key: ghc-${{ matrix.ghc }}.stack-${{ matrix.stack }}.lts-${{ env.lts }}.${{ runner.os }}
+        key: ghc:${{ matrix.ghc }}-stack:${{ matrix.stack }}-lts:20.5-${{ runner.os }}
     #
     # building & testing
     #
