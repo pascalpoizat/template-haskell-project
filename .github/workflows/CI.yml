@@ -9,38 +9,29 @@
 #     https://github.com/marketplace/actions/cache
 # - haskell/actions/setup (2)
 #     https://github.com/haskell/actions
-# - softprops/action-gh-release (1) ** COULD NOT MAKE IT WORK **
+# - softprops/action-gh-release (1)
 #     https://github.com/softprops/action-gh-release
-      # - name: release
-      #   uses: softprops/action-gh-release@v1
-      #   if: startsWith(github.ref, 'refs/tags/v')
-      #   with:
-      #     # tag_name: defaults to github.ref
-      #     # name: defaults to tag name
-      #     append_body: true
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     files: |
-      #       ${{ env.archive_path }}
-# - ncipollo/release-action (1)
+# - ncipollo/release-action (1) (this is an alternative, not used)
 #     https://github.com/ncipollo/release-action
-
 
 # TODO: check and add caching if needed
 # TODO: automatize setting program & version
 # TODO: don't build archives if not to be released
 # TODO: option to release snapshot versions
-# TODO: make one workflow for each OS
+# TODO: make one workflow for each OS ?
 
 # Notes:
 # - zip is removed for linux and macOS, if needed this can be added: zip -j ${{ env.archive }}.zip ${{ env.bin_path }}/${{ env.program }}
 # - tags activating releases should begin with v (eg: v1.0.0)
+# - startsWith(github.ref, 'refs/tags/v') is not working with on:push:branches:[master]
+#   so we use on:push:tags: but then it is not checked if the branch is master/main
 
 name: CI
 
-# run when push on main
 on:
   push:
-    branches: [master]
+    tags:
+      - v*
 env:
   lts: 20.5
   program: template-haskell-project-exe
@@ -143,12 +134,14 @@ jobs:
         echo archive ($Env:archive+".zip") created in $Env:bin_path from $file
         echo "archive_path=$pwsh_archive_path" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
     #
-    # release (if on a tag)
+    # release
     #
     - name: release
-      # uses: ncipollo/release-action@v1
-      # if: startsWith(github.ref, 'refs/tags/v') != true
-      run: |
-        echo la reference est : ${{ github.ref }}
-      #with:
-      #  artifacts: ${{ env.archive_path }}
+      uses: softprops/action-gh-release@v1
+      with:
+        # tag_name: defaults to github.ref
+        # name: defaults to tag name
+        # token: default to ${{ secrets.GITHUB_TOKEN }}
+        append_body: true
+        files: |
+          ${{ env.archive_path }}
