@@ -109,7 +109,7 @@ jobs:
     - name: set archive name (windows)
       if: startsWith(matrix.os, 'windows')
       run: |
-        $pwsh_archive = $Env:program-$Env:version-$Env:os.$Env:arch
+        $pwsh_archive = $Env:program+"-"+$Env:version+"-"+$Env:os+"."+$Env:arch
         echo "archive=$pwsh_archive" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       shell: pwsh
     #
