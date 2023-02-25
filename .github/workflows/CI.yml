@@ -158,5 +158,5 @@ jobs:
         # prerelease: false
         # replacesArtifacts: true
         artifactErrorsFailBuild: true
-        artifacts: ${{ env.archive_path }}
-        artifactContentType: $${{ env.archive_type }}
+        artifacts: "${{ env.archive_path }}"
+        artifactContentType: "$${{ env.archive_type }}"
