@@ -161,9 +161,11 @@ jobs:
     - name: release
       uses: ncipollo/release-action@v1.12.0
       with:
-        # draft: false
-        # prerelease: false
-        # replacesArtifacts: true
+        draft: false
+        prerelease: false
+        removeArtifacts: false
+        replacesArtifacts: true
+        skipIfReleaseExists: true
         artifactErrorsFailBuild: true
         artifacts: ${{ env.archive_path }}
         artifactContentType: $${{ env.archive_type }}
