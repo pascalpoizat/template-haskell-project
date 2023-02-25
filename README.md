@@ -1,14 +1,12 @@
 # template-haskell-project
 
-A simple template for Haskell projects built with Stack 
-
 [![Build Status](https://img.shields.io/github/actions/workflow/status/pascalpoizat/template-haskell-project/CI.yml?style=flat-square)](https://github.com/pascalpoizat/template-haskell-project/actions/workflows/CI.yml)
 [![License](https://img.shields.io/github/license/pascalpoizat/template-haskell-project.svg?style=flat-square)](LICENSE)
 [![Version](https://img.shields.io/github/tag/pascalpoizat/template-haskell-project.svg?label=version&style=flat-square)](template-haskell-project.cabal)<br/>
 
-- documentation to be updated (meanwhile, it has been removed, see earlier versions if needed).
+A simple template for Haskell projects built with Stack, together with some basic information to get into Haskell.
 
-- some language-independent information can be found here: [template-java-project](https://github.com/pascalpoizat/template-java-project).
+Some complementary language-independent information can be found [here](https://github.com/pascalpoizat/template-java-project) (one may have to dig among Java-specific stuff).
 
 ## Installing the environment
 
@@ -29,6 +27,34 @@ Installing the environment is simplified using [GHCup](https://www.haskell.org/g
 
 ## IDE
 
-A simple (and feature-rich) solution is to use the [Haskell Language Server](https://haskell-language-server.readthedocs.io/en/stable/) (HLS) which can be installed using GHCup as [presented here](https://haskell-language-server.readthedocs.io/en/stable/installation.html#ghcup), and have your IDE work with it.
+A simple (and [feature-rich](https://haskell-language-server.readthedocs.io/en/stable/features.html)) solution is to use the [Haskell Language Server](https://haskell-language-server.readthedocs.io/en/stable/) (HLS) which can be installed using GHCup as [presented here](https://haskell-language-server.readthedocs.io/en/stable/installation.html#ghcup), and have your IDE work with it.
 
 For [Visual Studio Code]() you can use the [Haskell plugin](https://marketplace.visualstudio.com/items?itemName=haskell.haskell), which is able to download HLS by need for you (indeed, it uses GHCUp for this).
+
+But HLS works with [many more](https://haskell-language-server.readthedocs.io/en/latest/configuration.html#configuring-your-editor) IDEs.
+
+## Tools
+
+- [summoner](https://github.com/kowainik/summoner), to setup Haskell projects (can avoid a lot of burden when starting a new project)
+- [hlint](https://github.com/ndmitchell/hlint) and [stan](https://github.com/kowainik/stan), to analyse your code and/or propose refactoring
+
+## Libraries
+
+### Archives
+
+- [Hackage](https://hackage.haskell.org) in general
+- [Stackage](https://www.stackage.org) for use with Stack
+
+### Personal selection
+
+- **specific preludes**
+    - [relude](https://hackage.haskell.org/package/relude), lightweight standard library
+- **data structures**
+    - [containers](https://hackage.haskell.org/package/containers), for assorted container types
+- **parsing:**
+    - [optparse-applicative](http://hackage.haskell.org/package/optparse-applicative), for parsing command-line options
+    - [attoparsec](https://hackage.haskell.org/package/attoparsec), for writing more complex parsers
+- **file formats:**
+    - [aeson](https://hackage.haskell.org/package/aeson), for JSON parsing/encoding
+    - [xml](https://hackage.haskell.org/package/xml), for simple XML-related tasks, and [HaXml](https://hackage.haskell.org/package/HaXml), for more complex ones
+    - [cassava](https://hackage.haskell.org/package/cassava), for CSV parsing/encoding
