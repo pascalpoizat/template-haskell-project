@@ -17,6 +17,10 @@
 # TODO: automatize setting program & version
 # TODO: use variable for LTS
 
+# Note: zip is removed for linux and macOS
+# if needed this can be added
+# zip -j  ${{ env.archive }}.zip       ${{ env.bin_path }}/${{ env.program }}
+
 name: CI
 
 # run when push on main
@@ -53,13 +57,13 @@ jobs:
       if: startsWith(matrix.os, 'windows') != true
       with:
         path: ~/.stack
-        key: stack-${{ matrix.ghc }}-${{ matrix.stack }}-${{ runner.os }}
+        key: stack-${{ matrix.ghc }}-${{ matrix.stack }}-${{ env.lts }}-${{ runner.os }}
     - name: cache C:\sr\snapshots (windows x86)
       uses: actions/cache@v3
       if: startsWith(matrix.os, 'windows')
       with:
         path: C:\sr\snapshots
-        key: stack-${{ matrix.ghc }}-${{ matrix.stack }}-${{ runner.os }}
+        key: stack-${{ matrix.ghc }}-${{ matrix.stack }}-${{ env.lts }}-${{ runner.os }}
     #
     # building & testing
     #
@@ -101,22 +105,30 @@ jobs:
     - name: set archive name (linux and macOS)
       if: startsWith(matrix.os, 'windows') != true
       run: |
-        echo "archive=${{ env.bin_path }}/${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}" >> $GITHUB_ENV
+        echo "archive=${{ env.program }}-${{ env.version }}-${{ env.os }}.${{ env.arch }}" >> $GITHUB_ENV
     - name: set archive name (windows)
       if: startsWith(matrix.os, 'windows')
       run: |
-        $pwsh_archive = Join-Path $Env:bin_path $Env:program-$Env:version-$Env:os.$Env:arch
+        $pwsh_archive = $Env:program-$Env:version-$Env:os.$Env:arch
         echo "archive=$pwsh_archive" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       shell: pwsh
     #
-    # make archive
+    # make archives
     #
-    - name: information
+    - name: make archive (linux and macOS)
+      if: startsWith(matrix.os, 'windows') != true
       run: |
-        echo ${{ env.archive }}.tar.gz built
-        echo ${{ env.archive }}.zip built
-    # tar czf ${{ env.archive }}.tar.gz -C ${{ env.bin_path }} ${{ env.program }}
-    # zip -j  ${{ env.archive }}.zip       ${{ env.bin_path }}/${{ env.program }}
+        tar czf ${{ env.archive }}.tar.gz -C ${{ env.bin_path }} ${{ env.program }}
+        echo archive ${{ env.archive }}.tar.gz created in ${{ env.bin_path }} from ${{ env.bin_path }}/${{ env.program }}
+    - name: make archive (windows)
+      if: startsWith(matrix.os, 'windows')
+      run: |
+        $file = JoinPath $Env:bin_path $Env:program+".exe"
+        $dest = JoinPath $Env:bin_path $Env:archive+".zip"
+        Get-ChildItem $file | Compress-Archive -DestinationPath $dest
+        echo archive $Env:archive+".zip" created in $Env:bin_path from $file
+    # 
+    # 
     # - name: release
     #   uses: softprops/action-gh-release@v1
     #   if: startsWith(github.ref, 'refs/tags/')
