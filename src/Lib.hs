@@ -8,7 +8,7 @@ where
 
 -- | A sample function printing out a sample string.
 someFunc :: IO ()
-someFunc = putStrLn "0.1.3.3"
+someFunc = putStrLn "0.1.4.0"
 
 -- | A Point.
 data Point = Point {x :: Int, y :: Int}

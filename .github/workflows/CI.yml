@@ -37,7 +37,7 @@ on:
 env:
   lts: 20.5
   program: template-haskell-project-exe
-  version: 0.1.3.0
+  version: 0.1.4.0
 jobs:
   build:
     name: build-${{ matrix.ghc }}-${{ matrix.stack }}-${{ matrix.os }}

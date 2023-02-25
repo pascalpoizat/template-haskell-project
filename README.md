@@ -8,6 +8,8 @@ A simple template for Haskell projects built with Stack, together with some basi
 
 Some complementary language-independent information can be found [here](https://github.com/pascalpoizat/template-java-project) (one may have to dig among Java-specific stuff).
 
+Note: version in the [source code](https://github.com/pascalpoizat/template-haskell-project/blob/master/src/Lib.hs), the [Cabal](https://github.com/pascalpoizat/template-haskell-project/blob/master/template-haskell-project.cabal) configuration, and the [CI workflow](https://github.com/pascalpoizat/template-haskell-project/blob/master/.github/workflows/CI.yml) (this should be automated).
+
 ## Installing the environment
 
 The environment is made up of the [GHC compiler](https://www.haskell.org/ghc/) and a dependency manager / build tool such as [Cabal](https://cabal.readthedocs.io/en/stable/) or [Stack](https://docs.haskellstack.org/en/stable/). Haskell libraries can be found on [Hackage](https://hackage.haskell.org). Stack comes with sets of compatible libraries from Hackage organized in [Long Term Support releases](https://www.stackage.org)(LTS).
