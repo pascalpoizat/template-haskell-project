@@ -9,8 +9,21 @@
 #     https://github.com/marketplace/actions/cache
 # - haskell/actions/setup (2)
 #     https://github.com/haskell/actions
-# - softprops/action-gh-release (1)
+# - softprops/action-gh-release (1) ** COULD NOT MAKE IT WORK **
 #     https://github.com/softprops/action-gh-release
+      # - name: release
+      #   uses: softprops/action-gh-release@v1
+      #   if: startsWith(github.ref, 'refs/tags/v')
+      #   with:
+      #     # tag_name: defaults to github.ref
+      #     # name: defaults to tag name
+      #     append_body: true
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     files: |
+      #       ${{ env.archive_path }}
+# - ncipollo/release-action (1)
+#     https://github.com/ncipollo/release-action
+
 
 # TODO: check and add caching if needed
 # TODO: automatize setting program & version
@@ -133,12 +146,7 @@ jobs:
     # release (if on a tag)
     #
     - name: release
-      uses: softprops/action-gh-release@v1
+      use: ncipollo/release-action@v1
       if: startsWith(github.ref, 'refs/tags/v')
       with:
-        # tag_name: defaults to github.ref
-        # name: defaults to tag name
-        append_body: true
-        token: ${{ secrets.GITHUB_TOKEN }}
-        files: |
-          ${{ env.archive_path }}
+        artifacts: ${{ archive_path }}
