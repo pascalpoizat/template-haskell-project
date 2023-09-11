@@ -48,7 +48,7 @@ jobs:
         stack: ['2.9.1']
         os: [ubuntu-latest, macOS-latest, windows-latest]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: stack setup
       uses: haskell/actions/setup@v2
       with:
